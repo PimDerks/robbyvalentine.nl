@@ -1,0 +1,13 @@
+/*------------------------------------*\
+    #LINKS
+\*------------------------------------*/
+
+a {
+  color: get-color('cta');
+  text-decoration: underline;
+
+  @include attention {
+    text-decoration: none;
+  }
+
+}

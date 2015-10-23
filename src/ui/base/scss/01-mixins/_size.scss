@@ -1,0 +1,15 @@
+/*------------------------------------*\
+    #SIZE
+\*------------------------------------*/
+
+/**
+ * Sets the width/height of an element in one line.
+ * @author Pim Derks
+ * @param {string} The desired width of the element including unit.
+ * @param {string} The desired height of the element, including unit. Defaults to the $width.
+*/
+
+@mixin size($width, $height: $width) {
+    width: $width;
+    height: $height;
+}

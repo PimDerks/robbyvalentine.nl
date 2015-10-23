@@ -1,0 +1,20 @@
+/*------------------------------------*\
+    #ATTENTION
+\*------------------------------------*/
+
+/**
+ * Hover/Active/Focus states in one go.
+ * @author Harry Roberts
+ * @link http://sassmeister.com/gist/35c9c323d22eefdbf293
+*/
+
+// When we give an element some ‘attention’.
+@mixin attention() {
+
+  &:hover,
+  &:active,
+  &:focus {
+    @content;
+  }
+
+}

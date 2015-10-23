@@ -1,0 +1,60 @@
+/*------------------------------------*\
+    #TYPOGRAPHIC-SCALE-SETTINGS
+\*------------------------------------*/
+
+// Typographic scales which can be used.
+//
+// When the value is an integer the base-font-size gets multiplied by the power of the value.
+// 16 * 1.067, 16 * 1.067 * 1.067 etc.
+//
+// When the value is a list there is no ratio, it is simply multiplication:
+// 16 * 1, 16 * 2, 16 * 3 etc.
+
+$typographic-scales:(
+    'minor-second':     1.067,
+    'major-second':     1.125,
+    'minor-third':      1.2,
+    'major-third':      1.25,
+    'perfect-fourth':   1.33,
+    'augmented-fourth': 1.414,
+    'perfect-fifth':    1.5,
+    'golden-ratio':     1.618,
+    'fibonacci':        (1, 1, 2, 3, 5, 8, 13, 21)
+);
+
+
+// Breakpoints
+
+$typographic-breakpoints:(
+    'xs':   (
+        'font-size': 12,
+        'line-height': 1.618,
+        'scale': map-get($typographic-scales, 'minor-third')
+    )
+);
+
+// These should be ordered smallest to largest. The numbers are extra units of the baseline: line-height / margin-bottom
+
+$typographic-scale-names:(
+    //'xsmall',
+    'small': (0 1),
+    'base': (0 1),
+    'epsilon': (0 1),
+    'delta': (1 1),
+    'gamma': (0 1),
+    'beta': (1 1),
+    'alpha': (0 1)
+);
+
+// These should be ordered smallest to largest
+
+$typographic-scale-sizes:(
+    //-2,
+    -1,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+);

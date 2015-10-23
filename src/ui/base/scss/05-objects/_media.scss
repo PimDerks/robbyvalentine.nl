@@ -1,0 +1,21 @@
+/*------------------------------------*\
+    #MEDIA
+\*------------------------------------*/
+
+.o-media {
+  overflow: hidden;
+
+  .o-media__img {
+    // float: left;
+    display: inline-block;
+    vertical-align: baseline;
+  }
+
+  .o-media__body {
+    // display: block;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: baseline;
+  }
+
+}

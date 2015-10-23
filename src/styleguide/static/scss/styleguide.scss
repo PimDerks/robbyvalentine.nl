@@ -1,0 +1,139 @@
+@import '../../../ui/base/scss/01-mixins/all';
+@import '../../../ui/base/scss/02-settings/all';
+@import '../../../ui/base/scss/03-base/all';
+@import '../../../ui/base/scss/05-objects/all';
+@import '../../../ui/base/scss/04-defaults/all';
+@import '../../../ui/base/scss/08-trumps/all';
+
+html,
+body {
+  height: 100%;
+}
+
+.styleguide-index {
+  overflow: hidden;
+  max-width: none;
+  padding-left: 0;
+  width: 100%;
+}
+
+.styleguide-wrapper {
+  display: flex;
+  height: 100%;
+  max-width: none;
+  padding-left: 0;
+  width: 100%;
+
+  .styleguide-nav {
+    overflow: auto;
+    width: 20%;
+  }
+
+  .styleguide-content {
+    position: relative;
+    width: 80%;
+
+    iframe {
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+
+  }
+
+}
+
+.styleguide {
+
+  /* nav */
+  .styleguide-nav {
+
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      border-top: 1px solid;
+      font-weight: bold;
+      list-style: none;
+    }
+
+    span,
+    a {
+      display: block;
+      padding: baseline(.5);
+      text-decoration: none;
+    }
+
+    a {
+      font-weight: normal;
+    }
+
+  }
+
+
+  /* Colors */
+  &-colors {
+    width: 200px;
+
+    &__color {
+      padding-bottom: 100%;
+      position: relative;
+    }
+
+    @for $i from 1 through length($colors) {
+      $color: nth($colors, $i);
+      $name: nth($color, 1);
+      $code: nth($color, 2);
+
+      > li:nth-child(#{$i}) > * {
+        background-color: $code;
+
+        &::before,
+        &::after {
+          background: rgba(#000000, .25);
+          left: 0;
+          position: absolute;
+          text-align: center;
+          width: 100%;
+        }
+
+        &::before {
+          content: $name;
+          top: 0;
+        }
+
+        &::after {
+          bottom: 0;
+          content: '#{$code}';
+        }
+
+      }
+
+    }
+
+    > li:nth-child(#{length($colors)}) ~ li {
+      display: none;
+    }
+
+  }
+
+  .grid-placeholder {
+    background: rgba(#808080, .25);
+    display: block;
+    float: none;
+    padding: baseline(1);
+    text-align: center;
+    width: 100%;
+
+    *:last-child {
+      margin-bottom: 0;
+    }
+
+  }
+
+}
+

@@ -1,0 +1,221 @@
+/*------------------------------------*\
+    #TYPOGRAPHIC-SCALE-UTILS
+\*------------------------------------*/
+
+$unit: 'rem';
+
+/**
+ * Transforms an absolute unit to a relative unit.
+ * @param {Number} The amount of the absolute unit.
+ * @param {Number} The font-size of the body.
+ * @param {Number} The context of the $pixels in pixels. Only necessary when outputting em's.
+ * @return {String} The calculated relative unit.
+ * @author Pim Derks
+*/
+
+@function rel($pixels, $font-size, $context) {
+
+    @if $unit == 'em' {
+        @return $pixels/$context + em;
+    } @else if $unit == 'rem' {
+        @return $pixels/$font-size + rem;
+    }
+
+}
+
+/**
+ * Calculate a relative unit for a certain breakpoint and context
+ * @param {Number} The amount of the absolute unit.
+ * @param {String} The name of the breakpoint to use.
+ * @param {String} The context of the $pixels.
+ * @return A relative unit, as requested.
+ * @author Pim Derks
+*/
+
+@function calc-rel ($pixels, $breakpoint: 'xs', $context: 'base') {
+
+    // get config for breakpoint
+    $config: map-get($typographic-breakpoints, $breakpoint);
+
+    @if not $config {
+        @error 'No value found for `#{$breakpoint}`. Please make sure it is defined in `$typographic-breakpoints` map.';
+    }
+
+    // get config values
+    $font-size: map-get($config, 'font-size');
+    $line-height: map-get($config, 'line-height');
+
+    // get calculated font-size in pixels
+    $context: get-font-size($config, $context);
+
+    @return rel($pixels, $font-size, $context);
+
+}
+
+/**
+ * Return the required amount of baseline units.
+ * @param {Number} The amount of baseline units required.
+ * @param {String} The name of the breakpoint to use.
+ * @param {String} The context in which we want a baseline unit.
+ * @return {String} The calculated amount of base-lines in a relative unit.
+ * @author Pim Derks
+*/
+
+@function baseline ($amount: 1, $breakpoint: 'xs', $context: 'base') {
+
+    // get config for breakpoint
+    $config: map-get($typographic-breakpoints, $breakpoint);
+
+    @if not $config {
+        @error 'No value found for `#{$breakpoint}`. Please make sure it is defined in `$typographic-breakpoints` map.';
+    }
+
+    // get config values
+    $font-size: map-get($config, 'font-size');
+    $line-height: map-get($config, 'line-height');
+
+    // calculate line-height in pixels
+    $pixels: $font-size * $line-height;
+
+    @return calc-rel($pixels * $amount, $breakpoint, $context);
+
+}
+
+/**
+ * Calculcate a value.
+ * @param {Number} The properties to write.
+ * @param {List|Number} The scale to use. Can be a number of a list.
+ * @param {Number} The index to use (used for power-calculation or getting the current scale if $scale is a list.
+ * @return The calculated value.
+ * @author Pim Derks
+*/
+
+@function value-scale($value, $scale, $index) {
+
+    @if type-of($scale) == list {
+        $factor: nth($scale, $index); // for a custom typographic scale
+        $value: $value * $factor;
+    } @else {
+        $factor: nth($typographic-scale-sizes, $index); // for a fixed typographic scale
+        $value: $value * pow($scale, $factor);
+    }
+    @return $value;
+
+}
+
+/**
+ * Calculcate the value of a property.
+ * @param {String} The name of the property to calculate.
+ * @param {Number} The amount of the property to calculate.
+ * @param {String} The name of the breakpoint to use.
+ * @param {String} The context in which we want a baseline unit.
+ * @return The calculated value.
+ * @author Pim Derks
+*/
+
+@function calculate-prop-value($prop, $value, $config, $context) {
+    $index: map-get-index-of-key($typographic-scale-names, $context); // for a non-fixed typographic scale
+
+    // get config values
+    $scale: map-get($config, 'scale');
+    $font-size: map-get($config, 'font-size');
+    $line-height: map-get($config, 'line-height');
+
+    $initial: 0;
+
+    // initial value
+    @if $prop == 'font-size' {
+        $initial: $font-size;
+    } @else {
+        $initial: $font-size * ($line-height * $value);
+    }
+
+    @return value-scale($initial, $scale, $index);
+
+}
+
+/**
+ * Calculcate the line-height for a given font-size.
+ * @param {Number} The font-size to get the line-height for.
+ * @param {List} A map containing the config from $typographic-breakpoints.
+ * @param {String} The context in which we want a baseline unit.
+ * @param {Number} Can be used to add extra baseline subunits if necessary.
+ * @return The required line-height in pixels.
+ * @author Pim Derks
+*/
+
+@function get-line-height($font-size, $config, $context: 'base', $extra: 0) {
+    $base-font-size: map-get($config, 'font-size');
+    $line-height: map-get($config, 'line-height');
+    $line-height-pixels: $base-font-size * $line-height;
+    $half: $line-height-pixels/2;
+    $return: 0;
+
+    @while $return < $line-height-pixels {
+        $return: $return + $half;
+    }
+
+    @while $return <= $font-size {
+        $return: $return + $half;
+    }
+
+    // extra
+    @if $extra {
+        $return: $return + ($half * $extra);
+    }
+
+    @return $return;
+
+}
+
+
+/**
+ * Calculcate the font-size for a name (e.g. 'alpha').
+ * @param {List} A map containing the config from $typographic-breakpoints.
+ * @param {String} The context of which we want the font-size.
+ * @return The calculated font-size in pixels.
+ * @author Pim Derks
+*/
+
+@function get-font-size($config, $context: 'base') {
+    @return calculate-prop-value('font-size', 1, $config, $context);
+}
+
+/**
+ * Calculcate tscale
+ * @param {List} A map containing the config from $typographic-breakpoints.
+ * @param {String} The context of which we want the font-size.
+ * @author Pim Derks
+*/
+
+@mixin calculate-scale($breakpoint: nth($breakpoints, 1), $context: 'base', $extra: 0) {
+
+    // get config
+    $config: map-get($typographic-breakpoints, $breakpoint);
+
+    // get config items
+    $base-font-size: map-get($config, 'font-size');
+    $line-height: map-get($config, 'line-height');
+    $line-height-pixels: $base-font-size * $line-height;
+
+    // calculate font-size in pixels
+    $font-size-calculated: get-font-size($config, $context);
+
+    // calculate line-height in pixels
+    $line-height-calculated: get-line-height($font-size-calculated, $config, $context, $extra);
+
+    @if $unit == 'rem' {
+        $font-size-final: $font-size-calculated/$base-font-size + rem;
+        $line-height-final: $line-height-calculated/$base-font-size + rem;
+    }
+
+    @if $unit == 'em' {
+        $font-size-final: $font-size-calculated/$base-font-size + em;
+        $line-height-final: $line-height-calculated/$font-size-calculated + em;
+    }
+
+    // output
+    font-size: $font-size-final;
+    line-height: $line-height-final;
+
+}

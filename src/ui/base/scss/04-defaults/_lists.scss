@@ -1,0 +1,21 @@
+/*------------------------------------*\
+    #LISTS
+\*------------------------------------*/
+
+ul,
+ol {
+    list-style-position: outside;
+    padding-left: baseline(1);
+}
+
+ul ol,
+ol ul,
+ul ul {
+    padding-left: baseline(1);
+}
+
+dl {
+    dt {
+        font-weight: bold;
+    }
+}

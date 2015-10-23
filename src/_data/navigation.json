@@ -1,0 +1,43 @@
+[
+{
+  "title": "Werk",
+  "link": "#"
+},
+{
+  "title": "Diensten",
+  "link": "#",
+  "subitems": [
+    {
+      "title": "Expertises",
+      "link": "#"
+    },
+    {
+      "title": "Vorm",
+      "link": "#",
+      "subitems": [
+        {
+          "title": "Projecten",
+          "link": "#"
+        }
+      ]
+    }
+  ]
+},
+{
+  "title": "Over ons",
+  "link": "#",
+  "subitems": [
+    {
+      "title": "Profiel",
+      "link": "#"
+    },
+    {
+      "title": "Nieuws",
+      "link": "#"
+    }
+  ]
+},
+{
+  "title": "Contact",
+  "link": "#"
+}]

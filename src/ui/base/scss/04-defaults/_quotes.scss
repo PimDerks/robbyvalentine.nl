@@ -1,0 +1,26 @@
+/*------------------------------------*\
+    #QUOTES
+\*------------------------------------*/
+
+blockquote {
+    quotes: '\201C' '\201D' '\2018' '\2019';
+
+    p {
+        @extend %delta;
+        color: get-color('secondary');
+        font-family: $font-display;
+    }
+
+    p:first-of-type {
+        &::before {
+            content: open-quote;
+        }
+    }
+
+    p:last-of-type {
+        &::after {
+            content: close-quote;
+        }
+    }
+
+}

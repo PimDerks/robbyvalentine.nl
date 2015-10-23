@@ -1,0 +1,80 @@
+@import '../../../ui/base/scss/01-mixins/all';
+@import '../../../ui/base/scss/02-settings/all';
+
+
+/* Baseline background
+----------------------------------------------- */
+
+.baseline-button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  color: #FFFFFF;
+  padding: .75em;
+  background: #000000;
+  z-index: 10000;
+}
+
+.u-baseline {
+  background-image: linear-gradient(
+                  rgba(#000000, .1) 1px,
+                  transparent 1px,
+                  transparent 50%,
+                  rgba(#000000, .25) calc(50% + 1px),
+                  transparent calc(50% + 1px),
+                  transparent 100%);
+  background-position: left top;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  label,
+  ol,
+  ul,
+  dl,
+  p,
+  blockquote,
+  small,
+  .alpha,
+  .beta,
+  .gamma,
+  .delta,
+  .epsilon,
+  .small,
+  .xsmall,
+  .base {
+    background: rgba(#FF0000, .15) !important;
+  }
+
+}
+
+/* Set base font-size
+----------------------------------------------- */
+
+@each $bp-name, $bp-size in $breakpoints {
+
+  $bp-config: map-get($typographic-breakpoints, $bp-name);
+
+  @if not $bp-config {
+    // @warn 'No value found for `#{$bp-name}`. Please make sure it is defined in `$typographic-breakpoints` map.';
+  }
+
+  @if map-has-key($typographic-breakpoints, $bp-name) {
+
+    $bp: map-get($breakpoints, $bp-name);
+    $font-size: map-get($bp-config, 'font-size');
+    $line-height: map-get($bp-config, 'line-height');
+
+    @include respond-min($bp-name) {
+
+      .baseline {
+        background-size: 100% $line-height + em;
+      }
+
+    }
+
+  }
+
+}

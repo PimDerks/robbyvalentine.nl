@@ -1,0 +1,10 @@
+//
+// 1. IE10 and below might not make the whole thing clickable unless there's a background defined. The Base64 url is a 1x1 transparent pixel.
+//
+
+@mixin target() {
+    @include position(absolute, bottom 0 top 0 left 0 right 0);
+    background: url('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='); /* 1 */
+    content: '';
+    z-index: 2;
+}

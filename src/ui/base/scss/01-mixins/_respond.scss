@@ -1,0 +1,88 @@
+/*------------------------------------*\
+    #RESPOND
+\*------------------------------------*/
+
+/**
+ * Prefixes placeholder-selectors.
+ * @author Jake Archibald (modified by Pim Derks)
+ * @param {string} The name of the breakpoint in the $breakpoints map.
+ * @link https://jakearchibald.github.io/sass-ie/
+*/
+
+$fix-mqs: false !default;
+
+@mixin respond-min($bp) {
+
+  // get breakpoint code
+  $width: map-get($breakpoints, $bp);
+
+  @if not $width {
+    @error 'No value found for `#{$bp}`. Please make sure it is defined in `$breakpoints` map.';
+  }
+
+  @if ($width == ''){
+    @content;
+  } @else {
+
+    @if $fix-mqs {
+      @if $fix-mqs >= $width {
+        @content;
+      }
+    } @else {
+      @media screen and (min-width: $width) {
+        @content;
+      }
+    }
+
+
+
+  }
+
+}
+
+@mixin respond-min-max($bp-min,$bp-max) {
+
+  $min: map-get($breakpoints, $bp-min);
+  $max: map-get($breakpoints, $bp-max);
+
+  $max: $max * .999; // to avoid overlapping with $max itself
+
+  @if not $min {
+    @error 'No value found for `#{$min}`. Please make sure it is defined in `$breakpoints` map.';
+  }
+
+  @if not $max {
+    @error 'No value found for `#{$max}`. Please make sure it is defined in `$breakpoints` map.';
+  }
+
+  @if $fix-mqs {
+    @if $fix-mqs >= $min and $fix-mqs <= $max {
+      @content;
+    }
+  } @else {
+    @media screen and (min-width: $min) and (max-width: $max) {
+        @content;
+    }
+  }
+
+}
+
+@mixin respond-max($bp) {
+
+  $width: map-get($breakpoints, $bp);
+
+  @if not $width {
+    @error 'No value found for `#{$bp}`. Please make sure it is defined in `$breakpoints` map.';
+  }
+
+  @if $fix-mqs {
+    @if $fix-mqs <= $width {
+      @content;
+    }
+  } @else {
+    @media screen and (max-width: $width) {
+      @content;
+    }
+  }
+}
+

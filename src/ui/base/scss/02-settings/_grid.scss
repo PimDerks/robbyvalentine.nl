@@ -1,0 +1,12 @@
+/* Grid definition (inspired by CSS Wizardry's grid)
+----------------------------------------*/
+
+$grid-gutter: 10px;
+$grid-max-width: 80em;
+$grid-sizes:
+  'one-whole'     100%,
+  'one-half'      50%,
+  'one-third'     33.33333%,
+  'two-third'     66.66666%,
+  'one-fourth'    25%,
+  'three-fourth'  75%;

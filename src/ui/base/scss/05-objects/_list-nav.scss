@@ -1,0 +1,11 @@
+/*------------------------------------*\
+    #LIST-BORDER
+\*------------------------------------*/
+
+
+.o-list-nav {
+  @include list-bare;
+  > li {
+    display: inline-block;
+  }
+}

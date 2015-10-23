@@ -1,0 +1,110 @@
+/*------------------------------------*\
+    #RESET
+\*------------------------------------*/
+
+
+/**
+ * Generic elements
+ */
+
+object {
+  outline: none;
+}
+
+hr {
+  display: none;
+}
+
+br {
+  height: 0;
+  line-height: 0;
+  clear: both;
+}
+
+sub,
+sup {
+  font-size: .675em;
+}
+
+sub {
+  vertical-align: bottom;
+}
+
+sup {
+  vertical-align: top;
+}
+
+i {
+  font-style: normal;
+}
+
+/**
+ * Remove the gap between audio, canvas, iframes images, videos and the bottom of their containers.
+ */
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+  vertical-align: middle;
+}
+
+/**
+ * Remove all margins and paddings from elements
+ */
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+dl,
+dd,
+ol,
+ul,
+form,
+fieldset,
+legend,
+figure,
+table,
+th,
+td,
+caption,
+hr {
+  margin: 0;
+  padding: 0;
+}
+
+/**
+ * Give a help cursor to elements that give extra info on `:hover`.
+ */
+
+// scss-lint:disable QualifyingElement
+abbr[title],
+dfn[title] {
+  cursor: help;
+}
+
+/**
+ * Remove underlines from potentially troublesome elements.
+ */
+
+u,
+ins {
+  text-decoration: none;
+}
+
+/**
+ * Apply faux underlines to inserted text via `border-bottom`.
+ */
+
+ins {
+  border-bottom: 1px solid;
+}

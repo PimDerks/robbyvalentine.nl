@@ -1,0 +1,24 @@
+/*------------------------------------*\
+    #FONT-FACE
+\*------------------------------------*/
+
+/**
+ * Font-face mixin, for use of external fonts. Assumes all different font files are available.
+ * @author Lowen
+ * @param string use $primary-font global variable
+ * @param string path and filename to font
+ * @param string defaults to normal
+*/
+
+@mixin font-face($font-family, $path, $weight : normal, $style : normal) {
+    @font-face {
+        font-family: '#{$font-family}';
+        src: url('#{$path}.eot');
+        src: url('#{$path}.eot?#iefix') format('embedded-opentype'),
+            //url('#{$path}.svg##{$font-family}') format('svg'),
+        url('#{$path}.ttf') format('truetype'),
+        url('#{$path}.woff') format('woff');
+        font-weight: $weight;
+        font-style: $style;
+    }
+}

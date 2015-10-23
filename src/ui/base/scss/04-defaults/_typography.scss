@@ -1,0 +1,249 @@
+/*------------------------------------*\
+    #TYPOGRAPHY
+\*------------------------------------*/
+
+body {
+  font-family: $font-display;
+  font-weight: 100;
+}
+
+/* Basic vertical rhythm
+----------------------------------------------- */
+
+@each $bp-name, $bp-code in $breakpoints {
+  @if map-has-key($typographic-breakpoints, $bp-name) {
+    $scope: map-get($typographic-breakpoints, $bp-name);
+
+    @include respond-min($bp-name) {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        blockquote,
+        pre,
+        dl,
+        ol,
+        ul,
+        form,
+        fieldset,
+        legend,
+        figure,
+        table,
+        caption,
+        hr,
+        address {
+          margin-bottom: baseline(1);
+        }
+    }
+  }}
+
+/* Headings
+----------------------------------------------- */
+
+h1,
+.alpha {
+  @extend %alpha;
+  font-weight: 400;
+}
+
+h2,
+.beta {
+  @extend %beta;
+  font-weight: 400;
+}
+
+h3,
+.gamma {
+  @extend %gamma;
+  font-weight: 400;
+}
+
+h4,
+.delta {
+  @extend %delta;
+  font-weight: 400;
+}
+
+h5,
+.epsilon {
+  @extend %epsilon;
+  font-weight: bold;
+}
+
+p {
+  @extend %base;
+  margin: 0;
+}
+
+small {
+  @extend %small;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: $font-display;
+}
+
+$color-h1: get-color('brand');
+$color-h2: get-color('brand-alt');
+$color-h3: get-color('brand-light');
+$color-h4: get-color('brand');
+
+h1 {
+  &,
+  & a {
+    color: $color-h1;
+  }
+}
+
+h2 {
+  &,
+  & a {
+    color: $color-h2;
+  }
+}
+
+h3 {
+  &,
+  & a {
+    color: $color-h3;
+  }
+}
+
+h4 {
+  &,
+  & a {
+    color: $color-h4;
+  }
+}
+
+h1,
+h2,
+h3,
+h4 {
+  a {
+    text-decoration: none;
+  }
+}
+
+@for $i from 1 through length($breakpoints) {
+  $bp: nth($breakpoints, $i);
+  $bp-name: nth($bp, 1);
+  $bp-code: nth($bp, 2);
+
+  @if map-has-key($typographic-breakpoints, $bp-name) {
+    $scope: map-get($typographic-breakpoints, $bp-name);
+
+    // first breakpoint should be without media-query
+    @if $i > 1 {
+
+      @include respond-min($bp-name) {
+
+        @each $scale in $typographic-scale-names {
+          $scale-name: nth($scale, 1);
+          $scale-scale: nth($scale, 2);
+          $scale-extra-line-height: nth($scale-scale, 1);
+          $scale-margin-bottom: nth($scale-scale, 2);
+
+          .#{$scale-name},
+          %#{$scale-name} {
+            @include calculate-scale($bp-name, $scale-name, $scale-extra-line-height);
+            margin-bottom: baseline($scale-margin-bottom, $bp-name, $scale-name);
+          }
+        }
+
+      }
+
+    } @else {
+
+      @each $scale in $typographic-scale-names {
+        $scale-name: nth($scale, 1);
+        $scale-scale: nth($scale, 2);
+        $scale-extra-line-height: nth($scale-scale, 1);
+        $scale-margin-bottom: nth($scale-scale, 2);
+
+        .#{$scale-name},
+        %#{$scale-name} {
+          @include calculate-scale($bp-name, $scale-name, $scale-extra-line-height);
+          margin-bottom: baseline($scale-margin-bottom, $bp-name, $scale-name);
+        }
+      }
+
+    }
+
+  }
+
+}
+
+/* Set base font-sizes configured in $typographic-breakpoints.
+----------------------------------------------- */
+
+$base: 16; // browser default
+
+@each $bp-name, $bp-size in $breakpoints {
+
+  $bp-config: map-get($typographic-breakpoints, $bp-name);
+
+  @if not $bp-config {
+    // @warn 'No value found for `#{$bp-name}`. Please make sure it is defined in `$typographic-breakpoints` map.';
+  }
+
+  @if map-has-key($typographic-breakpoints, $bp-name) {
+
+    $bp: map-get($breakpoints, $bp-name);
+    $font-size: map-get($bp-config, 'font-size');
+    $line-height: map-get($bp-config, 'line-height');
+
+    @include respond-min($bp-name) {
+
+      html {
+        font-size: ($font-size/$base) * 100%;
+        line-height: $line-height;
+      }
+
+      .u-baseline {
+        background-size: 100% $line-height + em;
+      }
+
+    }
+
+  }
+
+}
+
+/* As we only use 1 typographic scale in this project, we set the base-font-size for other breakpoints manually.
+----------------------------------------------- */
+
+@include respond-min('s') {
+  html {
+    font-size: 81.25%; /* 13/16 */
+  }
+}
+
+@include respond-min('m') {
+  html {
+    font-size: 87.5%; /* 14/16 */
+  }
+}
+
+@include respond-min('l') {
+  html {
+    font-size: 100%; /* 16/16 */
+  }
+}
+
+@include respond-min('xl') {
+  html {
+    font-size: 112.5%; /* 18/16 */
+  }
+}
+
+small {
+  display: block;
+}
