@@ -85,17 +85,17 @@ var methods = {
         });
 
         // get data files from /components/
-        utils.walk(path.join(config.roots.src, config.paths.ui, 'components'), function(path){
-
-            var name = utils.stripExtension(utils.getFileName(path)),
-                ext = utils.getExtension(path);
-
-            if(ext === 'json'){
-                // read file
-                data.data[name] = JSON.parse(fs.readFileSync(path, 'utf8'));
-            }
-
-        });
+        //utils.walk(path.join(config.roots.src, config.paths.ui, 'components'), function(path){
+        //
+        //    var name = utils.stripExtension(utils.getFileName(path)),
+        //        ext = utils.getExtension(path);
+        //
+        //    if(ext === 'json'){
+        //        // read file
+        //        data.data[name] = JSON.parse(fs.readFileSync(path, 'utf8'));
+        //    }
+        //
+        //});
 
         return data;
 
@@ -145,6 +145,8 @@ var methods = {
 
     renderSwigFile: function(src, targetDir){
 
+        var filename = utils.getFileName(src);
+
         // strip extension from file
         var name = src.substr(0, src.indexOf('.swig')),
             json = name + '.json';
@@ -167,6 +169,12 @@ var methods = {
         var oldSrc = src;
         src = fmData.body;
 
+        var templatePath = path.relative(oldSrc, path.join(config.roots.src, config.paths.layouts, config.paths.prototype, 'default.swig'));
+
+        templatePath = templatePath.replace('../', '');
+
+        src = '{% extends "' + templatePath + '" %}' + src;
+
         // invalidate the swig cache
         swig.invalidateCache();
 
@@ -181,7 +189,16 @@ var methods = {
 
         var dest = targetDir ? targetDir : config.roots.www;
 
-        utils.writeFile(path.join(dest, name, 'index.html'), swiggedContent, function(err){
+        // where to write
+        var fileDest;
+
+        if(filename === 'index.swig'){
+            fileDest = path.join(dest, name.replace(path.sep + 'index', ''), 'index.html');
+        } else {
+            fileDest = path.join(dest, name, 'index.html');
+        }
+
+        utils.writeFile(fileDest, swiggedContent, function(err){
             if(err){
                 // console.log("Unable to render component: " + oldSrc);
                 return;
