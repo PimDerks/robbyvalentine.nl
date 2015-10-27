@@ -1,3 +1,3 @@
 ---
-title: It's All About..
+title: It's All About...
 ---

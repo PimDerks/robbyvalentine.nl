@@ -17,8 +17,8 @@ module.exports = (function(){
             data: '_data',
             ui: 'ui',
             assets: 'assets',
-            static: 'static',
-            staticMin: 'static-min',
+            static: '_static',
+            staticMin: '_static-min',
             sass: 'scss',
             css: 'css',
             js: 'js',
@@ -28,7 +28,7 @@ module.exports = (function(){
             icons: 'icons',
             layouts: '_layouts',
             shim: 'shim',
-            media: 'media',
+            media: '_media',
             styleguide: 'styleguide'
         },
 

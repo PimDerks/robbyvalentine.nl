@@ -48,24 +48,6 @@ var methods = {
 
     },
 
-    getModules: function(){
-
-        var result = [];
-
-        // Please note that modules get directly rendered from the src directory, There's no need for pre-rendering.
-
-        utils.walk(path.join(config.roots.src, config.paths.ui), function(path){
-
-            if(utils.getExtension(path) === 'swig' && path.indexOf('modules') >= 0 && path.indexOf('components') < 0){
-                result.push(path);
-            }
-
-        });
-
-        return result;
-
-    },
-
     getComponents: function(){
 
         var result = [];
@@ -85,7 +67,8 @@ var methods = {
     getData: function(src){
 
         var data = {
-            data: {}
+            data: {
+            }
         };
 
         // get data files from /data/ directory
@@ -118,27 +101,6 @@ var methods = {
 
     },
 
-    renderModules: function(){
-
-        return new Promise(function(resolve, reject){
-
-            var modules = methods.getModules();
-
-            modules.forEach(function(module, index){
-
-                methods.renderSwigFile(module, config.roots.tmp);
-                if(index === modules.length - 1){
-                    console.log('Successfully rendered ' + modules.length + ' modules.');
-                    setTimeout(function() {
-                        resolve();
-                    }, 10);
-                }
-            });
-
-        });
-
-    },
-
     renderComponents: function(){
 
         return new Promise(function(resolve, reject){
@@ -166,11 +128,13 @@ var methods = {
             var pages = methods.getPages();
 
             pages.forEach(function (page, index) {
+
                 methods.renderSwigFile(page, config.roots.www);
+
                 if (index === (pages.length - 1)) {
                     console.log('Successfully rendered ' + pages.length + ' pages.');
                     setTimeout(function() {
-                        resolve();
+                        // resolve();
                     });
                 }
             });
@@ -193,7 +157,6 @@ var methods = {
         if(local){
             data.data['local'] = local;
         }
-
 
         // get FontMatter data
         var fmData = utils.getFrontMatterData(src);
@@ -218,13 +181,13 @@ var methods = {
 
         var dest = targetDir ? targetDir : config.roots.www;
 
-        utils.writeFile(path.join(dest, name + '.html'), swiggedContent, function(err){
+        utils.writeFile(path.join(dest, name, 'index.html'), swiggedContent, function(err){
             if(err){
-                // console.log("Unable to render component: " + src);
+                // console.log("Unable to render component: " + oldSrc);
                 return;
             }
 
-            // console.log("Succesfully rendered component: " + src);
+            // console.log("Succesfully rendered component: " + oldSrc);
 
         });
 
@@ -238,11 +201,6 @@ module.exports.copy = function() {
         // console.log('Rendering components...');
 
         methods.renderComponents();
-
-        // log rendering modules
-        // console.log('Rendering modules...');
-
-        methods.renderModules();
 
         // log rendering pages
         // console.log('Rendering pages...');
